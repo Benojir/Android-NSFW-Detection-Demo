@@ -6,6 +6,7 @@ import android.graphics.Bitmap;
 import android.net.Uri;
 import android.os.Bundle;
 import android.provider.MediaStore;
+import android.util.Log;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -23,6 +24,7 @@ public class MainActivity extends AppCompatActivity {
     private TextView resultText;
     private NSFWDetection nsfwDetection;
     private ExecutorService executorService; // Thread executor for background tasks
+    private static final String TAG = "MADARA";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -37,7 +39,7 @@ public class MainActivity extends AppCompatActivity {
         try {
             nsfwDetection = new NSFWDetection(this, R.raw.model); // Load from raw folder
         } catch (IOException e) {
-            e.printStackTrace();
+            Log.e(TAG, "onCreate: ", e);
         }
 
         // Initialize ExecutorService with a single background thread
@@ -67,7 +69,7 @@ public class MainActivity extends AppCompatActivity {
                 executorService.execute(() -> processImageInBackground(bitmap));
 
             } catch (IOException e) {
-                e.printStackTrace();
+                Log.e(TAG, "onActivityResult: ", e);
             }
         }
     }
